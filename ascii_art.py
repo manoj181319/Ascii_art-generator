@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 imagePath = 'test.jpg'
 image = Image.open(imagePath)
@@ -31,5 +31,16 @@ for i in range(0, len(ascii_str), new_width):
 # Print result to console    
 print(ascii_art)
 
-with open("output_ascii_art.txt", "w") as f:
-    f.write(ascii_art)
+font = ImageFont.load_default()
+char_width, char_height = font.getsize("A")
+img_width = char_width * new_width
+img_height = char_height * new_height
+
+ascii_image = Image.new("L", (img_width, img_height), color=255)
+draw = ImageDraw.Draw(ascii_image)
+
+for j, line in enumerate(ascii_art.splitlines()):
+    draw.text((0,j * char_height), line, fill=0, font=font)
+
+ascii_image.save("output_asciiart.jpg")
+print("ASCII art has been saved as output_asciiart.jpg")
