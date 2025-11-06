@@ -19,7 +19,7 @@ pixels = gray_image.getdata() #give pixel values as a list
 
 ascii_str = ""
 for pixel_value in pixels:
-    # Scale pixel value(0-255) to match our ASCII_CHARS length
+    # Scale pixel value (0-255) to match our ASCII_CHARS length
     index = pixel_value * (len(ASCII_CHARS) - 1) // 255
     ascii_str += ASCII_CHARS[index]
     
