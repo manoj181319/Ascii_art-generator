@@ -2,12 +2,19 @@ from PIL import Image, ImageDraw, ImageFont
 
 imagePath = 'test.jpg'
 image = Image.open(imagePath)
+orig_width, orig_height = image.size
 #let's determine new dimensions
-new_width = 100
-width, height = image.size
-aspect_ratio = height / width
-new_height = int(aspect_ratio * new_width)
-#let's resize the image
+max_ascii_width = 250
+if orig_width > max_ascii_width:
+    new_width = max_ascii_width
+    new_height = int(orig_height * (new_width / orig_width))
+else:
+    new_width = orig_width
+    new_height = orig_height
+    
+font_correction = 0.90
+new_height = int(new_height * font_correction)
+#image resizing
 resized_image = image.resize((new_width, new_height))
 #let's convert to grayscale for better image production
 gray_image = resized_image.convert('L')
@@ -26,16 +33,17 @@ for pixel_value in pixels:
 # Arrange the Ascii string into lines (rows)
 ascii_art = ""
 for i in range(0, len(ascii_str), new_width):
-    ascii_art += ascii_str[i:i+new_width] +"\n"
+    ascii_art += ascii_str[i:i+new_width] + "\n"
 
 # Print result to console    
 print(ascii_art)
 
-font = ImageFont.load_default()
-char_width, char_height = font.getsize("A")
+font = ImageFont.truetype("consola.ttf", size=16)
+bbox = font.getbbox("A")
+char_width = bbox[2] - bbox[0]
+char_height = bbox[3] - bbox[1]
 img_width = char_width * new_width
 img_height = char_height * new_height
-
 ascii_image = Image.new("L", (img_width, img_height), color=255)
 draw = ImageDraw.Draw(ascii_image)
 
