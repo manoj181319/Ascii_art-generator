@@ -1,6 +1,8 @@
 # ASCII Art Generator
 
-A small Python project to generate ASCII art from text or images. This repository provides a simple command-line tool and examples to convert input (text or images) into readable ASCII art that can be printed to the terminal or saved to a file.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A small Python project to generate ASCII art from text or images. This repository provides a simple command-line tool and examples to convert input (text or images) into readable ASCII art that can[...] 
 
 ## Features
 - Select between black & white or colored ASCII output.
