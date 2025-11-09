@@ -1,4 +1,29 @@
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont
+import cv2
+import numpy as np
+
+def sketch_effect(pil_img):
+    """Apply OpenCV canny edge detection for a better sketch effect"""
+    img = np.array(pil_img.convert('L'))
+    img_blur = cv2.GaussianBlur(img, (3,3), 0)
+    edges = cv2.Canny(img_blur, threshold1=80, threshold2=30)
+    sketch = cv2.bitwise_not(edges)
+    return Image.fromarray(sketch)
+
+def color_sketch_effect(pil_img, t1=40, t2=120):
+    color_np = np.array(pil_img.convert('RGB'))  
+    gray_np = cv2.cvtColor(color_np, cv2.COLOR_RGB2GRAY)
+    img_blur = cv2.GaussianBlur(gray_np, (3,3), 0)
+    edges = cv2.Canny(img_blur, threshold1=t1, threshold2=t2)
+    # Let's make edges black and elsewhere retain the original color
+    mask = edges.astype(bool)
+    color_sketch = color_np.copy()
+    color_sketch[mask] = [0,0,0]  # Draw black lines on color wherever edge found
+    return Image.fromarray(color_sketch)
+
+
+    
+    
 # --------- USER inputs ---------
 output_mode = input("Choose output mode ('bw' for black/white, 'color' for colored ASCII): ").strip().lower()
 sketch_mode = input("Choose art style ('normal' or 'sketch'): ").strip().lower()
@@ -32,8 +57,12 @@ else:
 
 # Apply sketch effect if chosen
 if sketch_mode == "sketch":
-    img_for_processing = img_for_processing.filter(ImageFilter.CONTOUR)
-    print("Applied sketch effect.")
+    if color_ascii:
+        img_for_processing = color_sketch_effect(img_for_processing)
+    else:
+        img_for_processing = sketch_effect(img_for_processing)
+    print("Applied OpenCV-powered sketch effect.")
+
 
 
 #let's determine new dimensions
