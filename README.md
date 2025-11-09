@@ -58,6 +58,7 @@ Output will be saved as output_asciiart.jpg in your working directory.
 
 ## Changelog (latest version)
 - Added color/grayscale and sketch/normal mode selection.
+- Added OpenCV powered sketch effect.
 - Improved font and output customization.
 - Modularized image processing pipeline.
 - Bundled all required font files for cross-platform use.
